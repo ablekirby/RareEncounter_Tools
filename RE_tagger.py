@@ -3,7 +3,7 @@
 # September 14, 2021
 # Able Kirby
 
-from mutagen.id3 import ID3, TPE1, TIT2, TALB, TYER, TRCK, COMM, TCOP, TIT3, USLT
+from mutagen.id3 import ID3, TPE1, TIT2, TALB, TYER, TRCK, COMM, TCOP, TIT3, USLT, APIC
 import sys
 from datetime import datetime
 
@@ -24,7 +24,7 @@ class reep:
 
     def write_tags(self):
 
-        # there is no try [block]
+        # there is no try
         mytag = ID3(self.fn)
         #mytag.delall()
         mytag.add(TPE1(encoding=3, text=self.artist_name))
@@ -36,6 +36,16 @@ class reep:
         mytag.add(TCOP(encoding=3, text=str(self.copyright)))
         mytag.add(TIT3(encoding=3, text=str(self.subtitle)))
         mytag.add(USLT(encoding=3, text=str(self.unsynced_lyrics)))
+
+        imgfn = ".\logo_alt2_scaled.jpg"
+        with open(imgfn, 'rb') as albumart:
+            mytag['APIC'] = APIC(
+                            encoding=3,
+                            mime='image/jpeg',
+                            type=3, desc=u'Cover',
+                            data=albumart.read()
+                            )
+
         mytag.save()
 
     @staticmethod
@@ -46,5 +56,10 @@ class reep:
         encounter.track_title = "Encounter #" + str(num) + " " + title
         return encounter
 
-sexualencounter = reep.new(sys.argv[1], int(sys.argv[2]), sys.argv[3])
-sexualencounter.write_tags()
+
+if len(sys.argv) != 4:
+    print("\nUsage: RE_tagger.py [mp3 file name] [encounter number] [title]\n\n")
+
+else:
+    myreep = reep.new(sys.argv[1], int(sys.argv[2]), sys.argv[3])
+    myreep.write_tags()
