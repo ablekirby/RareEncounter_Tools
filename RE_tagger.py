@@ -7,6 +7,9 @@ from mutagen.id3 import ID3, TPE1, TIT2, TALB, TYER, TRCK, COMM, TCOP, TIT3, USL
 import sys
 from datetime import datetime
 
+
+imgfn = ".\logo_alt2_scaled.jpg"
+
 class reep:
     def __init__(self):
         self.artist_name = "Able Kirby and coldacid"
@@ -37,7 +40,7 @@ class reep:
         mytag.add(TIT3(encoding=3, text=str(self.subtitle)))
         mytag.add(USLT(encoding=3, text=str(self.unsynced_lyrics)))
 
-        imgfn = ".\logo_alt2_scaled.jpg"
+        
         with open(imgfn, 'rb') as albumart:
             mytag['APIC'] = APIC(
                             encoding=3,
@@ -45,7 +48,6 @@ class reep:
                             type=3, desc=u'Cover',
                             data=albumart.read()
                             )
-
         mytag.save()
 
     @staticmethod
@@ -62,6 +64,7 @@ if len(sys.argv) != 4:
 
 else:
     print("Tagging " + sys.argv[1] + " With ID3 info.")
+    print("imgfn is " + imgfn)
     print("Encounter Number is " + sys.argv[2])
     print("Encounter Title: " + sys.argv[3])
     myreep = reep.new(sys.argv[1], int(sys.argv[2]), sys.argv[3])
