@@ -7,7 +7,6 @@ verstr = "1.0"
 import requests
 from datetime import datetime
 import time
-import sys
 
 # Return sunset time at location as seconds from last UTC midnight
 def get_ss(latlong):
@@ -43,20 +42,20 @@ def pretty_time(dt):
     else:
         return f"{(ssEnd-tnow):.0f} seconds"
 
-
-
-
 # Program start
 print("RE_Twilight " + verstr)
 print("Rare Encounter: Twilight Trigger")
 print(f"Program Start: {get_tnow():.0f} seconds into day (UTC)")
 
 # Today's Sunset times [via sunrise-sunset.org]
-#ssStart = get_ss((39.278, -76.861)) # Maryland
-#ssEnd = get_ss((43.91, -78.788)) # Courtise
+ssStart = get_ss((39.278, -76.861)) # Maryland
+ssEnd = get_ss((43.91, -78.788)) # Courtise
 
-ssStart = 17153
-ssEnd = 17183
+# Swap if needed
+if ssEnd > ssStart:
+    tmp = ssEnd
+    ssEnd = ssStart
+    ssStart = tmp
 
 # Trigger
 armed1 = True
